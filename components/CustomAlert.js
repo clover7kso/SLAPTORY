@@ -4,14 +4,17 @@ import PropTypes from "prop-types";
 import Modal from 'react-native-modal';
 import {SCREEN_HEIGHT,SCREEN_WIDTH} from '../config'
 
+const Container = styled.View`
+  flex:1
+  justify-content:center
+  position : absolute
+`;
+
+
 const Touchable = styled.TouchableOpacity`
   flex:1
 `;
 
-const Container = styled.View`
-  flex:1
-  justify-content:center
-`;
 
 const InnerContainer = styled.View`
   padding-top:40px
@@ -57,31 +60,34 @@ const Cancel = styled.Text`
   font-size:20px
 `;
 
-const CustomAlert = ({visible, onCancle, onConfirm, title, content}) => (
+const CustomAlert = ({ alertValue, onConfirm, onCancle}) => {
+  return (
     <Container>
-        <Modal isVisible={visible.value}>
+        <Modal isVisible={alertValue.visible}>
         <InnerContainer>
-            <Title>{title}</Title>
-            <Content>{content}</Content>
+            <Title>{alertValue.title}</Title>
+            <Content>{alertValue.content}</Content>
             <ButtonContainer>
                 <Touchable onPress={()=>{
                     if(onConfirm!==undefined) onConfirm()
-                    visible.onChange(false)
+                    alertValue.onChange(false)
                 }} >
                     <Confirm>확인</Confirm>
                 </Touchable>
-                
-                <Touchable onPress={()=>{
-                    if(onCancle!==undefined) onCancle()
-                    visible.onChange(false)
-                }}>
-                    <Cancel>취소</Cancel>
-                </Touchable>
+                {onCancle!==undefined?
+                  <Touchable onPress={()=>{
+                      if(onCancle!==undefined) onCancle()
+                      alertValue.onChange(false)
+                  }}>
+                      <Cancel>취소</Cancel>
+                  </Touchable>:null
+                }
             </ButtonContainer>
         </InnerContainer>
         </Modal>
     </Container>
-);
+  );
+}
 
 CustomAlert.propTypes = {
     visible: PropTypes.bool.isRequired,

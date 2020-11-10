@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 const OutContainer = styled.View`
   align-items: center;
+  justify-content: center;
   flex: 1;
 `;
 const Text = styled.Text`
   align-items: center;
-  flex: 1;
+  justify-content: center;
 `;
 
 export default ({ navigation }) => {

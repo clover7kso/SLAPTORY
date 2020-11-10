@@ -4,11 +4,13 @@ import AuthButton from "../../components/AuthButton";
 import AuthButtonText from "../../components/AuthButtonText";
 import AuthInput from "../../components/AuthInput";
 import useInput from "../../hooks/useInput";
+import useAlert from "../../hooks/useAlert";
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { useMutation } from "react-apollo-hooks";
-import { LOG_IN } from "./AuthQueries";
+import { SIGN_IN } from "./AuthQueries";
 import { useLogIn } from "../../AppAuthContext";
 import BackPressHeaderAuth from "../../components/BackPressHeaderAuth";
+import CustomAlert from "../../components/CustomAlert";
 
 const OutContainer = styled.View`
   flex: 1;
@@ -23,12 +25,15 @@ const InContainer1 = styled.View`
 `;
 
 export default ({ navigation }) => {
+  const alert_1 = useAlert(false,"로그인 TITLE", "로그인 CONTENT");
+
+
   const emailInput = useInput("");
   const pwInput = useInput("");
   const logIn = useLogIn();
 
   const [loading, setLoading] = useState(false);
-  const [signInMutation] = useMutation(LOG_IN, {
+  const [signInMutation] = useMutation(SIGN_IN, {
     variables: {
       id: emailInput.value,
       password: pwInput.value,
@@ -39,14 +44,14 @@ export default ({ navigation }) => {
     const pwValue = pwInput.value;
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (emailValue === "") {
-      return Alert.alert("이메일이 비어있습니다");
+      return alert_1.onChange(true,"로그인 오류","이메일이 비어있습니다")
     } else if (!emailValue.includes("@") || !emailValue.includes(".")) {
-      return Alert.alert("올바른 이메일형식을 입력해주세요");
+      return alert_1.onChange(true,"로그인 오류","올바른 이메일형식을 입력해주세요")
     } else if (!emailRegex.test(emailValue)) {
-      return Alert.alert("올바른 이메일형식을 입력해주세요");
+      return alert_1.onChange(true,"로그인 오류","올바른 이메일형식을 입력해주세요")
     }
     if (pwValue === "") {
-      return Alert.alert("비밀번호가 비어있습니다");
+      return alert_1.onChange(true,"로그인 오류","비밀번호가 비어있습니다")
     }
     try {
       setLoading(true);
@@ -59,7 +64,7 @@ export default ({ navigation }) => {
         return;
       }
     } catch (e) {
-      Alert.alert(e.message.replace("GraphQL error: ", ""));
+      alert_1.onChange(true,"로그인 오류",e.message.replace("GraphQL error: ", ""))
     } finally {
       setLoading(false);
     }
@@ -92,6 +97,8 @@ export default ({ navigation }) => {
             text={"비밀번호를 잊으셨나요?"}
           />
         </InContainer1>
+        
+        <CustomAlert alertValue = {alert_1}/>
       </OutContainer>
     </TouchableWithoutFeedback>
   );
