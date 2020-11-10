@@ -35,9 +35,6 @@ function AuthNavigation() {
       elevation: 0, // remove shadow on Android
       shadowOpacity: 0, // remove shadow on iOS
     },
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
     headerLeft: () => (
       <Touchable onPress={() => {
         if(route.name==="SignUp")

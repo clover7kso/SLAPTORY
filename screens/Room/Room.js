@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useSignOut } from "../AppAuthContext";
+import { useSignOut } from "../../AppAuthContext";
 
 const OutContainer = styled.View`
   background:${props => props.theme.WHITE}
@@ -27,7 +27,7 @@ export default ({ navigation }) => {
   return (
       <OutContainer>
         <Touchable onPress={handleLogOut}>
-          <Text>로그아웃</Text>
+          <Text>채팅방-로그아웃</Text>
         </Touchable>
       </OutContainer>
   )
