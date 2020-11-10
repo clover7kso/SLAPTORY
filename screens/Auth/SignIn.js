@@ -5,7 +5,7 @@ import AuthButtonText from "../../components/AuthButtonText";
 import AuthInput from "../../components/AuthInput";
 import useInput from "../../hooks/useInput";
 import useAlert from "../../hooks/useAlert";
-import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
+import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useMutation } from "react-apollo-hooks";
 import { SIGN_IN } from "./AuthQueries";
 import { useSignIn } from "../../AppAuthContext";
