@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
+import useAlert from "../../hooks/useAlert";
 import AuthInput from "../../components/AuthInput";
 import AuthButton from "../../components/AuthButton";
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
@@ -11,6 +12,7 @@ import {
   BackHandler,
 } from "react-native";
 import BackPressHeaderAuth from "../../components/BackPressHeaderAuth";
+import CustomAlert from "../../components/CustomAlertTwoButton";
 
 const OutContainer = styled.View`
   background : white
@@ -72,6 +74,8 @@ const Row = styled.View`
 `;
 
 export default ({ navigation }) => {
+  const visible = useAlert(false);
+
   const emailInput = useInput("");
   const phoneInput = useInput("");
   const validInput = useInput("");
@@ -170,28 +174,13 @@ export default ({ navigation }) => {
 
   React.useEffect(() => {
     const backAction = () => {
-      Alert.alert(
-        "회원가입이 완료되지 않았습니다",
-        "화원가입이 완료되지 않은 상태에서 뒤로가면 내용은 저장되지 않습니다",
-        [
-          { text: "머무르기", style: "cancel", onPress: () => {} },
-          {
-            text: "뒤로가기",
-            style: "destructive",
-            // If the user confirmed, then we dispatch the action we blocked earlier
-            // This will continue the action that had triggered the removal of the screen
-            onPress: () => navigation.pop(1),
-          },
-        ]
-      );
+      visible.onChange(true)
       return true;
     };
-
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
-
     return () => backHandler.remove();
   }, []);
 
@@ -310,6 +299,8 @@ export default ({ navigation }) => {
               text="회원가입"
             />
           </InContainer1>
+
+          <CustomAlert visible = {visible} title={"뒤로가기하려구요?"} content={"현재까지 내용은 저장되지 않습니다"} onConfirm={()=>navigation.pop(1)}/>
 
         </OutContainer>
       </TouchableWithoutFeedback>

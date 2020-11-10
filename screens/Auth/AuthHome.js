@@ -24,8 +24,8 @@ const InContainer2 = styled.View`
 `;
 
 const LogoImg = styled.Image`
-  width: ${SCREEN_WIDTH / 2};
-  height: ${SCREEN_WIDTH / 2};
+  width: ${SCREEN_WIDTH / 1.6};
+  height: ${SCREEN_WIDTH / 1.6};
 `;
 
 
