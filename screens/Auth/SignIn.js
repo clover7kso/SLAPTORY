@@ -8,8 +8,7 @@ import useAlert from "../../hooks/useAlert";
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { useMutation } from "react-apollo-hooks";
 import { SIGN_IN } from "./AuthQueries";
-import { useLogIn } from "../../AppAuthContext";
-import BackPressHeaderAuth from "../../components/BackPressHeaderAuth";
+import { useSignIn } from "../../AppAuthContext";
 import CustomAlert from "../../components/CustomAlert";
 
 const OutContainer = styled.View`
@@ -27,10 +26,10 @@ const InContainer1 = styled.View`
 export default ({ navigation }) => {
   const alert_1 = useAlert(false,"로그인 TITLE", "로그인 CONTENT");
 
+  const signInApp = useSignIn();
 
   const emailInput = useInput("");
   const pwInput = useInput("");
-  const logIn = useLogIn();
 
   const [loading, setLoading] = useState(false);
   const [signInMutation] = useMutation(SIGN_IN, {
@@ -39,7 +38,7 @@ export default ({ navigation }) => {
       password: pwInput.value,
     },
   });
-  const handleLogin = async () => {
+  const handleSignIn = async () => {
     const emailValue = emailInput.value;
     const pwValue = pwInput.value;
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -60,7 +59,7 @@ export default ({ navigation }) => {
       } = await signInMutation();
 
       if (signIn) {
-        logIn(signIn);
+        signInApp(signIn);
         return;
       }
     } catch (e) {
@@ -73,7 +72,6 @@ export default ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <OutContainer>
-        <BackPressHeaderAuth navigation = {navigation}/>
         <InContainer1>
           <AuthInput
             {...emailInput}
@@ -89,7 +87,7 @@ export default ({ navigation }) => {
           <AuthButton
             disabled={loading}
             loading={loading}
-            onPress={handleLogin}
+            onPress={handleSignIn}
             text="로그인"
           />
           <AuthButtonText

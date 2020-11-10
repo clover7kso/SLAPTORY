@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useSignOut } from "../AppAuthContext";
 
 const OutContainer = styled.View`
   align-items: center;
@@ -11,10 +12,22 @@ const Text = styled.Text`
   justify-content: center;
 `;
 
+const Touchable = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+`;
+
 export default ({ navigation }) => {
+  const logOut = useSignOut();
+  const handleLogOut = () => {
+    logOut();
+  };
+
   return (
       <OutContainer>
-          <Text>테스트중입니다</Text>
+        <Touchable onPress={handleLogOut}>
+          <Text>로그아웃</Text>
+        </Touchable>
       </OutContainer>
   )
 };

@@ -173,7 +173,6 @@ export default ({ navigation }) => {
 
   return (
     <OutContainer>
-      <BackPressHeaderAuth navigation = {navigation}/>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
       >

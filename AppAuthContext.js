@@ -3,47 +3,47 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 export const AppAuthContext = createContext();
 
-export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
-  const logUserIn = async (token) => {
+export const AuthProvider = ({ isSignedIn: isSignedInProp, children }) => {
+  const [isSignedIn, setIsSignedIn] = useState(isSignedInProp);
+  const signUserIn = async (token) => {
     console.log(token);
     try {
-      await AsyncStorage.setItem("isLoggedIn", "true");
+      await AsyncStorage.setItem("isSignedIn", "true");
       await AsyncStorage.setItem("jwt", token);
-      setIsLoggedIn(true);
+      setIsSignedIn(true);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const logUserOut = async () => {
+  const signUserOut = async () => {
     try {
-      await AsyncStorage.setItem("isLoggedIn", "false");
+      await AsyncStorage.setItem("isSignedIn", "false");
       await AsyncStorage.setItem("jwt", "");
-      setIsLoggedIn(false);
+      setIsSignedIn(false);
     } catch (e) {
       console.log(e);
     }
   };
 
   return (
-    <AppAuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut }}>
+    <AppAuthContext.Provider value={{ isSignedIn, signUserIn, signUserOut }}>
       {children}
     </AppAuthContext.Provider>
   );
 };
 
-export const useIsLoggedIn = () => {
-  const { isLoggedIn } = useContext(AppAuthContext);
-  return isLoggedIn;
+export const useIsSignedIn = () => {
+  const { isSignedIn } = useContext(AppAuthContext);
+  return isSignedIn;
 };
 
-export const useLogIn = () => {
-  const { logUserIn } = useContext(AppAuthContext);
-  return logUserIn;
+export const useSignIn = () => {
+  const { signUserIn } = useContext(AppAuthContext);
+  return signUserIn;
 };
 
-export const useLogOut = () => {
-  const { logUserOut } = useContext(AppAuthContext);
-  return logUserOut;
+export const useSignOut = () => {
+  const { signUserOut } = useContext(AppAuthContext);
+  return signUserOut;
 };

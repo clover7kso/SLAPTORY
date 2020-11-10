@@ -19,7 +19,7 @@ import { setContext } from 'apollo-link-context';
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isSignedIn, setIsSignedIn] = useState(null);
   const preLoad = async () => {
     try {
       await Font.loadAsync({
@@ -65,11 +65,11 @@ export default function App() {
       });
       //client.resetStore();
       //client.cache.reset();
-      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-      if (!isLoggedIn || isLoggedIn === "false") {
-        setIsLoggedIn(false);
+      const isSignedIn = await AsyncStorage.getItem("isSignedIn");
+      if (!isSignedIn || isSignedIn === "false") {
+        setIsSignedIn(false);
       } else {
-        setIsLoggedIn(true);
+        setIsSignedIn(true);
       }
       setLoaded(true);
       setClient(client);
@@ -81,10 +81,10 @@ export default function App() {
     preLoad();
   }, []);
 
-  return loaded && client && isLoggedIn !== null ? (
+  return loaded && client && isSignedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>
-        <AuthProvider isLoggedIn={isLoggedIn}>
+        <AuthProvider isSignedIn={isSignedIn}>
           <NavController />
         </AuthProvider>
       </ThemeProvider>
