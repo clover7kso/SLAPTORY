@@ -1,8 +1,7 @@
-import React,{useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Modal from 'react-native-modal';
-import {SCREEN_HEIGHT,SCREEN_WIDTH} from '../config'
 
 const Container = styled.View`
   flex:1
@@ -75,7 +74,7 @@ const CustomAlert = ({ alertValue, onConfirm, onCancle}) => {
                     <Confirm>확인</Confirm>
                 </Touchable>
                 {onCancle!==undefined?
-                  <Touchable onPress={()=>{
+                  <Touchable onPress={async()=>{
                       if(onCancle!==undefined) onCancle()
                       alertValue.onChange(false)
                   }}>
@@ -90,7 +89,9 @@ const CustomAlert = ({ alertValue, onConfirm, onCancle}) => {
 }
 
 CustomAlert.propTypes = {
-    visible: PropTypes.bool.isRequired,
+  alertValue: PropTypes.object.isRequired,
+  onConfirm: PropTypes.func,
+  onCancle: PropTypes.func,
 };
 
 export default CustomAlert;

@@ -7,11 +7,7 @@ import AuthButton from "../../components/AuthButton";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import {  useMutation } from "react-apollo-hooks";
 import {SIGN_UP, PHONE_CHECK, PHONE_REQUEST } from "./AuthQueries";
-import {
-  ScrollView,
-  BackHandler,
-} from "react-native";
-import BackPressHeaderAuth from "../../components/BackPressHeaderAuth";
+import {ScrollView, BackHandler} from "react-native";
 import CustomAlert from "../../components/CustomAlert";
 
 const OutContainer = styled.View`
@@ -293,9 +289,9 @@ export default ({ navigation }) => {
               />
             </InContainer1>
             
-            <CustomAlert alertValue = {alert_1} onConfirm={()=>navigation.pop(1)} onCancle={()=>{}}/>
+            <CustomAlert alertValue = {alert_1} onConfirm={()=>navigation.goBack()} onCancle={()=>{}}/>
             <CustomAlert alertValue = {alert_2}/>
-            <CustomAlert alertValue = {alert_3} onConfirm={()=>navigation.pop(1)}/>
+            <CustomAlert alertValue = {alert_3} onConfirm={()=>navigation.goBack()}/>
           </OutContainer>
         </TouchableWithoutFeedback>
       </ScrollView>
