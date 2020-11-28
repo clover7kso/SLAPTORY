@@ -6,6 +6,7 @@ import styled from "styled-components";
 const S3URL = "https://slaptory-s3.s3.ap-northeast-2.amazonaws.com/"
 
 const TextItem = styled.Text`
+  font-family:NanumR
   background:white
   border-radius:50px
   text-align:center
@@ -43,14 +44,14 @@ const ImageCard = styled.Image`
 `
 
 const CarouselContainer = styled.View`
-  height: ${SCREEN_WIDTH / 3 * 1.2 +130};
+  height: ${SCREEN_WIDTH / 3 * 1.2 +160};
 `;
 
 
 export default class MyCustomCarousel extends PureComponent {
     constructor(props) {
         super(props);
-        this.setImage = props.setImage;      
+        this.handleClickItem = props.handleClickItem;      
         this.selected=0;
     }
 
@@ -58,12 +59,12 @@ export default class MyCustomCarousel extends PureComponent {
         return (
             <ImageContainer>
               <Touchable onPress = {()=>{
-                  this.setImage({uri:S3URL+item.Images[0].url})
+                  this.handleClickItem(item.id,{uri:S3URL+item.Images[0].url},index)
                   this.refs.carousel.snapToItem(index)
                   this.selected=index
                   this.forceUpdate()
                 }}>
-                {this.selected===index?<TextItem numberOfLines={1}>{item.title}</TextItem>:<EmptyItem/>}
+                {this.selected===index?<TextItem numberOfLines={1}>{item.userName}</TextItem>:<EmptyItem/>}
                 <ImageCard  
                   resizeMode={"cover"}
                   source={item!==undefined? {uri: S3URL+item.Images[0].url} : null}/>
