@@ -48,7 +48,8 @@ const ProfileName = styled.Text`
   font-size:20px
 `
 
-const BtnSubscribe = styled.TouchableOpacity`
+const Btn = styled.TouchableOpacity`
+  flex-direction:row
   background:white
   border-radius:20px
   padding-top:3px
@@ -58,7 +59,7 @@ const BtnSubscribe = styled.TouchableOpacity`
   margin-right:10px
 `
 
-const BtnSubscribeText = styled.Text`
+const BtnText = styled.Text`
   font-family:NanumR
 `
 
@@ -82,7 +83,19 @@ const PostVerticalContainer = styled.View`
   height:70
 `;
 
+const PostHorizontalContainer = styled.View`
+  flex-direction:row
+  align-items:baseline
+  justify-content:space-between
+`;
+
+const PostHorizontalContainer2 = styled.View`
+  flex-direction:row
+  align-items:baseline
+`;
+
 const PostTitle = styled.Text`
+  margin-top:10px
   font-family:NanumR
   font-size:25px
 `
@@ -94,6 +107,12 @@ const PostDate = styled.Text`
   color:grey
   font-size:11px
 `
+const PostLike = styled.Image`  
+  margin-right:5px
+  width: 15px;
+  height: 15px;
+`;
+
 
 //btn_back
 const BtnContainer =styled.View`
@@ -115,8 +134,8 @@ const S3URL = "https://slaptory-s3.s3.ap-northeast-2.amazonaws.com/"
 
 export default ({ navigation }) => {
   //animation Value
-  const [positionTop, setPositionTop] = useState(new Animated.ValueXY({x:0,y:0}))
-  const [positionBottom, setPositionBottom] = useState(new Animated.ValueXY({x:0,y:0}))
+  const [positionTop] = useState(new Animated.ValueXY({x:0,y:0}))
+  const [positionBottom] = useState(new Animated.ValueXY({x:0,y:0}))
   const moveDisappear = () =>{
     Animated.timing(
       positionTop,{
@@ -162,6 +181,7 @@ export default ({ navigation }) => {
   //data start
   const postManyRes = useQuery(POST_MANY)
   var activeIndex = 0;
+  var [viewOn,setViewOn] = useState(false)
   const [postId, setPostId] = postManyRes.data!==undefined?useState(postManyRes.data.postMany[0].id):useState("")
   const [image, setImage] = postManyRes.data!==undefined?useState({uri:S3URL+postManyRes.data.postMany[0].Images[0].url}):useState("")
 
@@ -172,18 +192,32 @@ export default ({ navigation }) => {
   var subscriberNum = ""
   var title = ""
   var date = ""
+  var likeNum = ""
   if(postOneRes.data !== undefined)
   {
     userName = postOneRes.data.postOne.userName
     subscriberNum = postOneRes.data.postOne.subscriberCount
     title = postOneRes.data.postOne.title
     date = postOneRes.data.postOne.timeFromToday
+    likeNum = postOneRes.data.postOne.likes
   }
   
-  const _handleDoubleClickItem = (clickedIndex) =>{
-    if(clickedIndex===activeIndex) {moveDisappear()}
+  const _handleClickMain = () =>{
+    if(viewOn===true) {
+      setViewOn(false)
+      moveBack()
+    }else if(viewOn===false) {
+      console.log("post add")
+    }
   }
-  const _handleClickItem=(postId, imageUrl,index)=>{
+
+  const _handleDoubleClickItem = (clickedIndex) =>{
+    if(clickedIndex===activeIndex) {
+      moveDisappear()
+      setViewOn(true)
+    }
+  }
+  const _handleClickItem=async(postId, imageUrl,index)=>{
     _handleDoubleClickItem(index)
     activeIndex = index
     setPostId(postId)
@@ -198,11 +232,6 @@ export default ({ navigation }) => {
               <Animated.View style={getStyleTop()}>
                 <BlurView 
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
                     width: SCREEN_WIDTH,
                     height: 90
                   }}
@@ -214,11 +243,12 @@ export default ({ navigation }) => {
                     <ProfileVerticalContainer>
                       <ProfileName>{userName}</ProfileName>
                       <ProfileHorizontalContainer>
-                        <BtnSubscribe>
-                          <BtnSubscribeText>
-                            구독+
-                          </BtnSubscribeText>
-                        </BtnSubscribe>
+                        <Btn onPress={()=>console.log("메세지")}>
+                          <BtnText>메세지</BtnText>
+                        </Btn>
+                        <Btn onPress={()=>console.log("구독+")}>
+                          <BtnText>구독+</BtnText>
+                        </Btn>
                         <ProfileNumSubscribers>{subscriberNum}명</ProfileNumSubscribers>
                       </ProfileHorizontalContainer>
                     </ProfileVerticalContainer>
@@ -227,18 +257,22 @@ export default ({ navigation }) => {
 
                 <BlurView 
                   style={{
-                    position: "absolute",
-                    top: 90,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
                     width: SCREEN_WIDTH,
-                    height: 70
+                    height: 80
                   }}
                   intensity={250}>
                   <PostVerticalContainer>
                     <PostTitle>{title}</PostTitle>
-                    <PostDate>{date}</PostDate>
+                    <PostHorizontalContainer>
+                      <PostHorizontalContainer2>
+                        <Btn onPress={()=>console.log("좋아요")}>
+                          <PostLike resizeMode={"contain"} source={require("../assets/images/btn_like.png")}/>
+                          <BtnText>좋아요</BtnText>
+                        </Btn>
+                        <PostDate>{likeNum}명</PostDate>
+                      </PostHorizontalContainer2>
+                      <PostDate>{date}</PostDate>
+                    </PostHorizontalContainer>
                   </PostVerticalContainer>
                 </BlurView>
               </Animated.View>
@@ -254,10 +288,10 @@ export default ({ navigation }) => {
 
           <BtnContainer>
             <BtnPost
-              onPress={()=>moveBack()}>
+              onPress={()=>_handleClickMain()}>
               <BtnPostImg 
                 resizeMode={"contain"}
-                source={require("../assets/images/btn_post.png")}/>
+                source={viewOn===false?require("../assets/images/btn_post.png"):require("../assets/images/btn_appear.png")}/>
               </BtnPost>
           </BtnContainer>
       </OutContainer>

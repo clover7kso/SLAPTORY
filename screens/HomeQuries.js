@@ -22,6 +22,7 @@ export const POST_ONE = gql`
       timeFromToday
       title
       subscriberCount
+      likes
       Images{
         url
       }
