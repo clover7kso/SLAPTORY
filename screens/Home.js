@@ -6,6 +6,7 @@ import {POST_MANY,POST_ONE} from './HomeQuries'
 import { useQuery } from "react-apollo-hooks";
 import { BlurView } from 'expo-blur';
 import {Animated} from 'react-native';
+import NewVerticalScroll from '../components/NewVerticalScroll'
 
 const OutContainer = styled.View`
   align-items: center;
@@ -139,7 +140,7 @@ export default ({ navigation }) => {
   const moveDisappear = () =>{
     Animated.timing(
       positionTop,{
-        toValue:{x:0,y:-90},
+        toValue:{x:0,y:-170},
         duration:400,
       }
     ).start()
@@ -169,12 +170,15 @@ export default ({ navigation }) => {
   const getStyleTop = () =>{
     return{
       position: "absolute",
-      transform:[{translateY:positionTop.y}]
+      transform:[{translateY:positionTop.y}],
     }
   }
   const getStyleBottom = () =>{
     return{
-      transform:[{translateY:positionBottom.y}]
+      transform:[{translateY:positionBottom.y}],
+      position:'absolute',
+      top: SCREEN_HEIGHT - 450, 
+
     }
   }
 
@@ -226,9 +230,10 @@ export default ({ navigation }) => {
   return (
       <OutContainer>
           <Container>
-            <ImageBack
-              resizeMode={"cover"}
-              source={image}/>
+            {viewOn===false?
+              <ImageBack
+                resizeMode={"cover"}
+                source={image}/>:<NewVerticalScroll/>}
               <Animated.View style={getStyleTop()}>
                 <BlurView 
                   style={{
