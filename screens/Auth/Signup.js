@@ -5,9 +5,9 @@ import useAlert from "../../hooks/useAlert";
 import AuthInput from "../../components/AuthInput";
 import AuthButton from "../../components/AuthButton";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import {  useMutation } from "react-apollo-hooks";
-import {SIGN_UP, PHONE_CHECK, PHONE_REQUEST } from "./AuthQueries";
-import {ScrollView, BackHandler} from "react-native";
+import { useMutation } from "react-apollo-hooks";
+import { SIGN_UP, PHONE_CHECK, PHONE_REQUEST } from "./AuthQueries";
+import { ScrollView, BackHandler } from "react-native";
 import CustomAlert from "../../components/CustomAlert";
 
 const OutContainer = styled.View`
@@ -35,7 +35,7 @@ const Container = styled.View`
   padding-top:13px
   padding-bottom:13px
   padding-right:17px
-  background-color: ${props => props.theme.PURPLE};
+  background-color: ${(props) => props.theme.PURPLE};
   border-radius: 5px;
   margin-bottom: 10px;
 `;
@@ -62,7 +62,6 @@ const TextFinal = styled.Text`
   border: 1px solid ${(props) => props.theme.PURPLE};
 `;
 
-
 const Row = styled.View`
   flex-direction:row
   align-items: center;
@@ -70,9 +69,13 @@ const Row = styled.View`
 `;
 
 export default ({ navigation }) => {
-  const alert_1 = useAlert(false,"뒤로가기하려구요?","현재까지 내용은 저장되지 않습니다");
-  const alert_2 = useAlert(false,"회원가입 TITLE", "회원가입 CONTENT");
-  const alert_3 = useAlert(false,"회원가입 완료","로그인을 로그인해주세요!");
+  const alert_1 = useAlert(
+    false,
+    "뒤로가기하려구요?",
+    "현재까지 내용은 저장되지 않습니다"
+  );
+  const alert_2 = useAlert(false, "회원가입 TITLE", "회원가입 CONTENT");
+  const alert_3 = useAlert(false, "회원가입 완료", "로그인을 로그인해주세요!");
 
   const emailInput = useInput("");
   const phoneInput = useInput("");
@@ -91,65 +94,100 @@ export default ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      if(!validCheck)
-        return alert_2.onChange(true,"회원가입 오류","전화번호 인증이 필요합니다.")
+      if (!validCheck)
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "전화번호 인증이 필요합니다."
+        );
       setRegisterLoading(true);
       const emailValue = emailInput.value;
       const phoneValue = phoneInput.value;
       const pwValue = pwInput.value;
       const pwConfirmValue = pwConfirmInput.value;
       const nameValue = nameInput.value;
-      
 
       const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const phoneRegex =  /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
+      const phoneRegex = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
       const pwRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
       const nameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,12}$/;
-      
 
       if (emailValue === "") {
-        return alert_2.onChange(true,"회원가입 오류","이메일이 비어있습니다")
+        return alert_2.onChange(true, "회원가입 오류", "이메일이 비어있습니다");
       } else if (!emailValue.includes("@") || !emailValue.includes(".")) {
-        return alert_2.onChange(true,"회원가입 오류","올바른 이메일형식을 입력해주세요")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "올바른 이메일형식을 입력해주세요"
+        );
       } else if (!emailRegex.test(emailValue)) {
-        return alert_2.onChange(true,"회원가입 오류","올바른 이메일형식을 입력해주세요")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "올바른 이메일형식을 입력해주세요"
+        );
       }
       if (phoneValue === "") {
-        return alert_2.onChange(true,"회원가입 오류","전화번호가 비어있습니다")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "전화번호가 비어있습니다"
+        );
       } else if (!phoneRegex.test(phoneValue)) {
-        return alert_2.onChange(true,"회원가입 오류", "잘못된 휴대폰 번호입니다.")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "잘못된 휴대폰 번호입니다."
+        );
       }
       if (pwValue === "") {
-        return alert_2.onChange(true,"회원가입 오류","비밀번호가 비어있습니다")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "비밀번호가 비어있습니다"
+        );
       } else if (pwValue !== pwConfirmValue) {
-        return alert_2.onChange(true,"회원가입 오류","비밀번호가 일치하지 않습니다")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "비밀번호가 일치하지 않습니다"
+        );
       } else if (!pwRegex.test(pwValue)) {
-        return alert_2.onChange(true,"회원가입 오류","특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식"
+        );
       }
       if (nameValue === "") {
-        return alert_2.onChange(true,"회원가입 오류","실명이 비어있습니다")
+        return alert_2.onChange(true, "회원가입 오류", "실명이 비어있습니다");
       } else if (!nameRegex.test(nameValue)) {
-        return alert_2.onChange(true,"회원가입 오류","닉네임은 2 ~ 12글자로 입력해주세요")
+        return alert_2.onChange(
+          true,
+          "회원가입 오류",
+          "닉네임은 2 ~ 12글자로 입력해주세요"
+        );
       }
 
       const {
         data: { signUp },
-      } = await signUpMutation(
-        {
-          variables:{
-            id:emailValue,
-            password:pwValue,
-            name:nameValue,
-            phone:phoneValue
-          }
-        }
-      );
-      if(signUp){
-        alert_3.onChange(true)
+      } = await signUpMutation({
+        variables: {
+          id: emailValue,
+          password: pwValue,
+          name: nameValue,
+          phone: phoneValue,
+        },
+      });
+      if (signUp) {
+        alert_3.onChange(true);
       }
-
     } catch (e) {
-      alert_2.onChange(true,"회원가입 오류",e.message.replace("GraphQL error: ", ""))
+      alert_2.onChange(
+        true,
+        "회원가입 오류",
+        e.message.replace("GraphQL error: ", "")
+      );
     } finally {
       setRegisterLoading(false);
     }
@@ -157,7 +195,7 @@ export default ({ navigation }) => {
 
   React.useEffect(() => {
     const backAction = () => {
-      alert_1.onChange(true)
+      alert_1.onChange(true);
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -198,103 +236,134 @@ export default ({ navigation }) => {
                 keyboardType="default"
               />
 
-            {!sendValid?
-              <Row>
-                <InContainer2>
-                  <AuthInput
-                    {...phoneInput}
-                    placeholder="전화번호"
-                    keyboardType="number-pad"
-                  />
-                </InContainer2>
-                <Touchable onPress={async()=>{
-                  if(phoneInput.value==="")
-                    return alert_2.onChange(true,"회원가입 오류","전화번호를 입력해주세요")
-                  try{
-                    const {
-                      data: { phoneRequest },
-                    } = await phoneRequestMutation({
-                        variables:{
-                          phoneNumber:phoneInput.value
+              {!sendValid ? (
+                <Row>
+                  <InContainer2>
+                    <AuthInput
+                      {...phoneInput}
+                      placeholder="전화번호"
+                      keyboardType="number-pad"
+                    />
+                  </InContainer2>
+                  <Touchable
+                    onPress={async () => {
+                      if (phoneInput.value === "")
+                        return alert_2.onChange(
+                          true,
+                          "회원가입 오류",
+                          "전화번호를 입력해주세요"
+                        );
+                      try {
+                        const {
+                          data: { phoneRequest },
+                        } = await phoneRequestMutation({
+                          variables: {
+                            phoneNumber: phoneInput.value,
+                          },
+                        });
+                        if (phoneRequest) {
+                          alert_2.onChange(
+                            true,
+                            "회원가입",
+                            "인증번호가 발송되었습니다"
+                          );
+                          setSendValid(true);
                         }
-                    })
-                    if(phoneRequest)
-                    {
-                      alert_2.onChange(true,"회원가입","인증번호가 발송되었습니다")
-                      setSendValid(true)
-                    }
-                  }
-                  catch (e) {
-                    alert_2.onChange(true,"회원가입 오류",e.message.replace("GraphQL error: ", ""))
-                  }
-                  
-                }}>
-                  <Container>
-                    <Text>인증코드요청</Text>
-                  </Container>
-                </Touchable>
-              </Row>:
-              <ContainerFinal>
-                <TextFinal>{phoneInput.value}</TextFinal>
-              </ContainerFinal>
-            }
-            {!validCheck?
-              <Row>
-                <InContainer2>
-                  <AuthInput
+                      } catch (e) {
+                        alert_2.onChange(
+                          true,
+                          "회원가입 오류",
+                          e.message.replace("GraphQL error: ", "")
+                        );
+                      }
+                    }}
+                  >
+                    <Container>
+                      <Text>인증코드요청</Text>
+                    </Container>
+                  </Touchable>
+                </Row>
+              ) : (
+                <ContainerFinal>
+                  <TextFinal>{phoneInput.value}</TextFinal>
+                </ContainerFinal>
+              )}
+              {!validCheck ? (
+                <Row>
+                  <InContainer2>
+                    <AuthInput
                       {...validInput}
                       placeholder="인증번호"
                       keyboardType="number-pad"
                     />
-                </InContainer2>
-                <Touchable onPress={async()=>
-                  {
-                    if(validInput.value==="")
-                      return  alert_2.onChange(true,"회원가입 오류","인증번호를 입력해주세요")
+                  </InContainer2>
+                  <Touchable
+                    onPress={async () => {
+                      if (validInput.value === "")
+                        return alert_2.onChange(
+                          true,
+                          "회원가입 오류",
+                          "인증번호를 입력해주세요"
+                        );
                       const {
                         data: { phoneCheck },
-                      } = await checkValidMutation(
-                      {
-                        variables:{
-                          phoneNumber:phoneInput.value,
-                          checkNumber:validInput.value
-                        }
-                    })
-                    console.log(phoneCheck)
-                    if(!phoneCheck){
-                      setSendValid(false)
-                      setValidCheck(false)
-                      validInput.onChange("")
-                      return alert_2.onChange(true,"회원가입 오류","인증번호 재요청이 필요합니다")
-                    }else{
-                      setValidCheck(phoneCheck)
-                      return alert_2.onChange(true,"회원가입","인증번호가 확인되었습니다")
-                    }
-                  }
-                }>
-                  <Container>
-                    <Text>번호확인</Text>
-                  </Container>
-                </Touchable>
-              </Row>:
-              <ContainerFinal>
-                <TextFinal>{validInput.value}</TextFinal>
-              </ContainerFinal>
-            }
+                      } = await checkValidMutation({
+                        variables: {
+                          phoneNumber: phoneInput.value,
+                          checkNumber: validInput.value,
+                        },
+                      });
+                      console.log(phoneCheck);
+                      if (!phoneCheck) {
+                        setSendValid(false);
+                        setValidCheck(false);
+                        validInput.onChange("");
+                        return alert_2.onChange(
+                          true,
+                          "회원가입 오류",
+                          "인증번호 재요청이 필요합니다"
+                        );
+                      } else {
+                        setValidCheck(phoneCheck);
+                        return alert_2.onChange(
+                          true,
+                          "회원가입",
+                          "인증번호가 확인되었습니다"
+                        );
+                      }
+                    }}
+                  >
+                    <Container>
+                      <Text>번호확인</Text>
+                    </Container>
+                  </Touchable>
+                </Row>
+              ) : (
+                <ContainerFinal>
+                  <TextFinal>{validInput.value}</TextFinal>
+                </ContainerFinal>
+              )}
               <AuthButton
                 disabled={registerLoading}
                 loading={registerLoading}
-                onPress={()=>handleRegister()}
+                onPress={() => handleRegister()}
                 text="회원가입"
               />
             </InContainer1>
-            
-            <CustomAlert alertValue = {alert_1} onConfirm={()=>navigation.goBack()} onCancle={()=>{}}/>
-            <CustomAlert alertValue = {alert_2}/>
-            <CustomAlert alertValue = {alert_3} onConfirm={()=>navigation.goBack()}/>
+
+            <CustomAlert
+              alertValue={alert_1}
+              onConfirm={() => navigation.goBack()}
+              onCancle={() => {}}
+            />
+            <CustomAlert alertValue={alert_2} />
+            <CustomAlert
+              alertValue={alert_3}
+              onConfirm={() => navigation.goBack()}
+            />
           </OutContainer>
         </TouchableWithoutFeedback>
       </ScrollView>
     </OutContainer>
-  )
+  );
 };
