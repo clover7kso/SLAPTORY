@@ -38,7 +38,7 @@ const ImageContainer = styled.View`
 `
 const ImageCard = styled.Image`
   width: ${SCREEN_WIDTH / 4 * 1.2};
-  height: ${SCREEN_WIDTH / 3 * 1.2};
+  height: ${SCREEN_WIDTH / 3 * 1.1};
   border-radius:30px
   margin-top:20px
 `
